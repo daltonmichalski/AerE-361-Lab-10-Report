@@ -1,0 +1,60 @@
+\documentclass[11pt]{report}
+\usepackage{outline}
+\usepackage{pmgraph}
+\usepackage[normalem]{ulem}
+\title{\textbf{AerE 361 Lab 10 Report}}
+\author{Dalton Michalski}
+\date{\oldstylenums{10}/\oldstylenums{30}/\oldstylenums{2018}}
+%--------------------Make usable space all of page
+\setlength\parindent{24pt}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\headsep}{-.25in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.5in}
+\usepackage{xcolor}
+\definecolor{light-gray}{gray}{0.95}
+\newcommand{\code}[1]{\colorbox{light-gray}{\texttt{#1}}}
+%--------------------Indention
+\setlength{\parindent}{1cm}
+
+\begin{document}
+%--------------------Title Page
+\maketitle
+ 
+%--------------------Begin Outline
+\section{Problem Statement}
+\begin{item}
+\item The goal of this lab is to produce a code to find the inverse of a 3X3 matrix meeting the following criteria: \begin{enumerate}
+    \item Read the matrix in from a CSV file, where the file name is provided as a command line arguement.
+    \item Verify input is a 3X3 matrix of numbers
+    \item Compute the determinate of the matrix, this is a way of checking if the input matrix is singular and invertible.
+    \item Compute the inverse of the given matrix using any technique.
+    \item Output the calculated inverse matrix to a file named \code{ans.csv}.
+    \item Create a \code{makefile} named \code{inv} which produces an executable that meets all of the above criteria.
+\end{enumerate}
+\end{item}
+\section{Program Design}
+\begin{outline}
+\item This code can be broken down into three main sections; Data Input, Data Processing, and Data Output.
+\\\textbf{Data Input:}\\
+For this project, the data is imported from a excel file in \code{.csv} format, and then must be parsed into a 3X3 matrix. The initial matrix is both imported and printed to the screen using two nested \code{for} loops, as well as multiple functions included in the header file \code{#include <string.h>}. The data for processing is stored in an array using \code{float} as the data type. \\
+\textbf{Data Processing:}\\
+Once the data has been imported, the first step is to compute the determinant of the initial matrix. A function appropriately named \code{determinant}, is used to accomplish this using two nested for loops. This number will be necessary later in the calculation, but this is also where the matrix is checked if is invertible. If the determinate is equal to zero, the code will stop as this means the matrix has no inverse. The next step is to find the transpose of the original matrix, this is again accomplished with a function and two nested for loops to perform the switching of rows and columns. Another external function is then used to calculate the "cofactor matrix", an explanation of what this is can be found at: http://www3.ul.ie/cemtl/pdf\%20files/bm2/Cofactors.pdf. Once the matrix of cofactors has been found, the final step to compute the inverse of the original matrix is to multiply the output of the transpose function by one over the determinant. The product of this multiplication will be the inverse matrix desired.\\
+\textbf{Data Output:}\\
+The final part of this project was to output the newly found inverse matrix to a csv file named "ans.csv". This is accomplished using the standard \code{fopen}, \code{fprintf}, and \code{fclose} functions to open the newly created file, print the desired values to it seperated by a comma, and then close the file.
+\end{outline}
+\section{Discussion}
+The main issues i encountered while writing this code were in the form of \code{segmentation fault (core dumped)}. I ran into this issues multiples times in both reading in and writing out the data.While I was able to debug the errors associated with importing the data, I am still unable to correctly output the inverse matrix to a .csv file. I have spent numerous hours attempting to correct this error, in both running \code{dgb} and well as performing "google foo" the best of my abilities. I have verified the code inputs the data and then correctly computes its inverse by printing the output of to the screen and checking it against hand calculations. I have been able to get the code to write to a .csv but not with the correct values and what is going wrong is beyond my knowledge on the subject. Within my GitHub repo, there is also a code named "matinv4.c" which when compiled with the \code{-lm -std=c99} will correctly read in a 3X3 matrix from a .csv file, computes its inverse, and print the inverse matrix in the correct form to the screen. I have included as a proof that the rest of my code aside from outputting the data functions correctly. \\ This error was resolved last minute, as the error was in that if there was a "ans.csv" already in the directory, the code would fail and display the \code{segmentation fault}. I will not include an .csv in my final git push, but if the code is run more than once during grading it will likely fail until this file is removed. 
+\newpage
+\section{References}
+\\ https://reu.dimacs.rutgers.edu/Symbols.pdf
+\\ https://fresh2refresh.com/c-programming/c-function/c-math-h-library-functions/
+\\ https://www.overleaf.com/learn/latex/Cross\_referencing\_sections\_and\_equations/
+\\ https://www.quora.com/What-is-argc-argv-in-C-What-is-its-purpose-Who-introduced-those-functions
+\\ https://www.geeksforgeeks.org/structures-c/
+\\ http://steve.hollasch.net/cgindex/coding/ieeefloat.html
+\\ https://stackoverflow.com/questions/26284110/strdup-confused-about-warnings-implicit-declaration-makes-pointer-with
+\\https://www.w3resource.com/c-programming-exercises/array/c-array-exercise-18.php
+\end{document}
